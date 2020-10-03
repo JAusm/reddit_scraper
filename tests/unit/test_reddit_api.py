@@ -1,5 +1,6 @@
 from unittest import TestCase
 from reddit_auth import RedditAuthInterface, PrawAuth
+import praw
 
 
 class RedditAPIInterfaceTest(TestCase):
@@ -90,3 +91,10 @@ class TestPrawAPI(TestCase):
             actual.connection_info["username"],
             "test_username"
         )
+
+    def test_auth_throws_error_with_bad_data(self):
+
+        instance = PrawAuth(self.connection_info)
+        actual = instance._auth()
+
+        self.assertIsInstance(actual, praw.reddit.Reddit)
