@@ -1,0 +1,7 @@
+#ignore all hidden files except .gitignore and .dockerignore
+.*
+!.gitignore
+!/.github/
+
+
+venv/*
