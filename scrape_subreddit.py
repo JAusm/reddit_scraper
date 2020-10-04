@@ -1,6 +1,8 @@
 from abc import ABCMeta
 from reddit_auth import PrawAuth
 
+from prawcore.exceptions import ResponseException
+
 
 class ScrapeSubredditInterface(object, metaclass=ABCMeta):
     """
@@ -24,7 +26,7 @@ class ScrapeSubredditInterface(object, metaclass=ABCMeta):
         pass
 
 
-class ScrapeSubreddits(ScrapeSubredditInterface):
+class ScrapeSubreddit(ScrapeSubredditInterface):
     """
 
     This class is responsible for scraping subreddits for content.
@@ -65,9 +67,14 @@ class ScrapeSubreddits(ScrapeSubredditInterface):
 
         """
         videos = []
-        for post in self.posts:
-            url = post.media['reddit_video']['fallback_url']
-            url = url.split("?")[0]
-            name = post.title[:30].rstrip() + ".mp4"
-            videos.append((url, name))
+        try:
+            for post in self.posts:
+                url = post.media['reddit_video']['fallback_url']
+                url = url.split("?")[0]
+                name = post.title[:30].rstrip() + ".mp4"
+                videos.append((url, name))
+        except ResponseException as bad_response:
+            # This is bad and I need to change it to retry rather than just returning
+            return bad_response.args
+
         return videos

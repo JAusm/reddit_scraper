@@ -1,6 +1,7 @@
 from unittest import TestCase
-from scrape_subreddit import ScrapeSubredditInterface, ScrapeSubreddits
+from scrape_subreddit import ScrapeSubredditInterface, ScrapeSubreddit
 from reddit_auth import PrawAuth
+from prawcore.exceptions import ResponseException
 
 
 class ScrapeSubredditInterfaceTest(TestCase):
@@ -29,14 +30,14 @@ class ScrapeSubredditsTests(TestCase):
 
         # When testing, actual credentials need to be supplied.
         self.connection_info = {
-            "client_id": "test_data",
-            "client_secret": "test_data",
-            "user_agent": "test_data"
+            "client_id": "test",
+            "client_secret": "test",
+            "user_agent": "test"
         }
         self.hot_limit = 6
 
-    def test_ScrapeSubreddits_returns_expected_results(self):
-        actual = ScrapeSubreddits(
+    def test_ScrapeSubreddit_returns_expected_results(self):
+        actual = ScrapeSubreddit(
             self.subreddit,
             self.connection_info,
             self.hot_limit
@@ -56,7 +57,7 @@ class ScrapeSubredditsTests(TestCase):
         """
         Verifies for each post we get a reddit video url in the fallback
         """
-        scrape_instance = ScrapeSubreddits(
+        scrape_instance = ScrapeSubreddit(
             self.subreddit,
             self.connection_info,
             self.hot_limit
@@ -76,7 +77,7 @@ class ScrapeSubredditsTests(TestCase):
 
         """
 
-        scrape_instance = ScrapeSubreddits(
+        scrape_instance = ScrapeSubreddit(
             self.subreddit,
             self.connection_info,
             self.hot_limit
@@ -94,3 +95,28 @@ class ScrapeSubredditsTests(TestCase):
                 video[0].startswith('https://v.redd.it/'),
                 True
             )
+
+    def test_get_videos_exception_reason(self):
+        """
+        Verify we get the expected exception reason
+
+        """
+
+        bad_connection = {
+            "client_id": "bad_id",
+            "client_secret": "bad_secret",
+            "user_agent": "bad_user"
+        }
+
+        scrape_instance = ScrapeSubreddit(
+            self.subreddit,
+            bad_connection,
+            self.hot_limit
+        )
+
+        actual = scrape_instance.get_videos()
+
+        self.assertEqual(
+            "received 401 HTTP response",
+            actual[0]
+        )
