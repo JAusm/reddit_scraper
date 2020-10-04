@@ -9,7 +9,7 @@ class RedditAuthInterface(object, metaclass=ABCMeta):
 
     """
 
-    def __init__(self, connection_info):
+    def __init__(self, connection_info: dict):
         """
 
         connection_info is a dictionary containing the following params:
@@ -21,6 +21,7 @@ class RedditAuthInterface(object, metaclass=ABCMeta):
 
         """
         self.connection_info = connection_info
+        self.auth = self._auth()
 
     def _auth(self):
         raise NotImplementedError
@@ -29,7 +30,7 @@ class RedditAuthInterface(object, metaclass=ABCMeta):
 class PrawAuth(RedditAuthInterface):
     """
 
-    This class is responsbile for authenticating with Reddit via
+    This class is responsible for authenticating with Reddit via
     the praw python library.
 
     """

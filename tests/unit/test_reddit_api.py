@@ -53,7 +53,6 @@ class RedditAPIInterfaceTest(TestCase):
 class TestPrawAPI(TestCase):
 
     def setUp(self) -> None:
-
         self.connection_info = {
             "client_id": "test_client_id",
             "client_secret": "test_client_secret",
@@ -68,7 +67,6 @@ class TestPrawAPI(TestCase):
         self.assertIsInstance(actual, PrawAuth)
 
     def test_int_has_expected_init_values(self):
-
         actual = PrawAuth(self.connection_info)
 
         self.assertEqual(
@@ -92,8 +90,7 @@ class TestPrawAPI(TestCase):
             "test_username"
         )
 
-    def test_auth_throws_error_with_bad_data(self):
-
+    def test_auth_is_the_expected_praw_object(self):
         instance = PrawAuth(self.connection_info)
         actual = instance._auth()
 
