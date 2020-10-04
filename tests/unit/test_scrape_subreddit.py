@@ -8,7 +8,7 @@ from praw.models import ListingGenerator
 class ScrapeSubredditInterfaceTest(TestCase):
 
     def setUp(self):
-        self.subreddit = "publicfreakouts"
+        self.subreddit = "PublicFreakout"
 
     def test_scrape_subreddit_interface_exists(self):
         actual = ScrapeSubredditInterface(self.subreddit)
@@ -20,14 +20,14 @@ class ScrapeSubredditInterfaceTest(TestCase):
 
         self.assertEqual(
             actual.subreddit,
-            "publicfreakouts"
+            "PublicFreakout"
         )
 
 
 class ScrapeSubredditsTests(TestCase):
 
     def setUp(self) -> None:
-        self.subreddit = "publicfreakouts"
+        self.subreddit = "PublicFreakout"
 
         self.connection_info = {
             "client_id": "test_client_id",
@@ -37,7 +37,7 @@ class ScrapeSubredditsTests(TestCase):
             "username": "test_username"
         }
 
-    def test_ScrapeSubreddits_accepts_list(self):
+    def test_ScrapeSubreddits_returns_expected_results(self):
         actual = ScrapeSubreddits(self.subreddit, self.connection_info)
 
         self.assertEqual(
@@ -59,4 +59,6 @@ class ScrapeSubredditsTests(TestCase):
             actual,
             ListingGenerator
         )
+
+        self.assertEqual(actual.__dict__["yielded"], 6)
 
