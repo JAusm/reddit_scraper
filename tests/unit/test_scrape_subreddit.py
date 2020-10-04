@@ -2,8 +2,6 @@ from unittest import TestCase
 from scrape_subreddit import ScrapeSubredditInterface, ScrapeSubreddits
 from reddit_auth import PrawAuth
 
-from praw.models import ListingGenerator
-
 
 class ScrapeSubredditInterfaceTest(TestCase):
 
@@ -29,16 +27,20 @@ class ScrapeSubredditsTests(TestCase):
     def setUp(self) -> None:
         self.subreddit = "PublicFreakout"
 
+        # When testing, actual credentials need to be supplied.
         self.connection_info = {
-            "client_id": "test_client_id",
-            "client_secret": "test_client_secret",
-            "password": "test_password",
-            "user_agent": "test_user_agent",
-            "username": "test_username"
+            "client_id": "test_data",
+            "client_secret": "test_data",
+            "user_agent": "test_data"
         }
+        self.hot_limit = 6
 
     def test_ScrapeSubreddits_returns_expected_results(self):
-        actual = ScrapeSubreddits(self.subreddit, self.connection_info)
+        actual = ScrapeSubreddits(
+            self.subreddit,
+            self.connection_info,
+            self.hot_limit
+        )
 
         self.assertEqual(
             actual.subreddit,
@@ -51,14 +53,44 @@ class ScrapeSubredditsTests(TestCase):
         )
 
     def test_query_subreddit_returns_data(self):
+        """
+        Verifies for each post we get a reddit video url in the fallback
+        """
+        scrape_instance = ScrapeSubreddits(
+            self.subreddit,
+            self.connection_info,
+            self.hot_limit
+        )
+        posts = scrape_instance.query_subreddit(self.hot_limit)
 
-        scrape_instance = ScrapeSubreddits(self.subreddit, self.connection_info)
-        actual = scrape_instance.query_subreddit(6)
+        for post in posts:
+            self.assertEqual(
+                post.media['reddit_video']['fallback_url'].startswith("https://v.redd.it/"),
+                True
+            )
 
-        self.assertIsInstance(
-            actual,
-            ListingGenerator
+    def test_get_videos_returns_expected_list_length(self):
+        """
+        Verifies that get_videos returns the expected amount of videos
+        given the hot_limit.
+
+        """
+
+        scrape_instance = ScrapeSubreddits(
+            self.subreddit,
+            self.connection_info,
+            self.hot_limit
         )
 
-        self.assertEqual(actual.__dict__["yielded"], 6)
+        videos = scrape_instance.get_videos()
 
+        self.assertEqual(
+            len(videos),
+            self.hot_limit
+        )
+
+        for video in videos:
+            self.assertEqual(
+                video[0].startswith('https://v.redd.it/'),
+                True
+            )

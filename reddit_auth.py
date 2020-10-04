@@ -46,9 +46,7 @@ class PrawAuth(RedditAuthInterface):
         reddit_connection = praw.Reddit(
             client_id=self.connection_info["client_id"],
             client_secret=self.connection_info["client_secret"],
-            password=self.connection_info["password"],
-            user_agent=self.connection_info["user_agent"],
-            username=self.connection_info["username"]
+            user_agent=self.connection_info["user_agent"]
         )
 
         return reddit_connection
