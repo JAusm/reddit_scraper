@@ -1,5 +1,5 @@
 from abc import ABCMeta
-from reddit_auth import PrawAuth
+from scraper.reddit_auth import PrawAuth
 
 from prawcore.exceptions import ResponseException
 

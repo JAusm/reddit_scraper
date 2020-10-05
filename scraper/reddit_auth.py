@@ -15,13 +15,10 @@ class RedditAuthInterface(object, metaclass=ABCMeta):
         connection_info is a dictionary containing the following params:
             client_id
             client_secret
-            password
             user_agent
-            username
 
         """
         self.connection_info = connection_info
-        self.auth = self._auth()
 
     def _auth(self):
         raise NotImplementedError
@@ -37,6 +34,8 @@ class PrawAuth(RedditAuthInterface):
     def __init__(self, connection_info):
         super().__init__(connection_info)
 
+        self.auth = self._auth()
+
     def _auth(self):
         """
 
@@ -50,5 +49,4 @@ class PrawAuth(RedditAuthInterface):
         )
 
         return reddit_connection
-
 

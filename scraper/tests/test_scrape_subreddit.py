@@ -1,7 +1,6 @@
 from unittest import TestCase
-from scrape_subreddit import ScrapeSubredditInterface, ScrapeSubreddit
-from reddit_auth import PrawAuth
-from prawcore.exceptions import ResponseException
+from scraper.scrape_subreddit import ScrapeSubredditInterface, ScrapeSubreddit
+from scraper.reddit_auth import PrawAuth
 
 
 class ScrapeSubredditInterfaceTest(TestCase):

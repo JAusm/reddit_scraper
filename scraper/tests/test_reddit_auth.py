@@ -1,5 +1,5 @@
 from unittest import TestCase
-from reddit_auth import RedditAuthInterface, PrawAuth
+from scraper.reddit_auth import RedditAuthInterface, PrawAuth
 import praw
 
 
