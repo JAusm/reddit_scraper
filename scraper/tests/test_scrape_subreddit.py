@@ -29,9 +29,9 @@ class ScrapeSubredditsTests(TestCase):
 
         # When testing, actual credentials need to be supplied.
         self.connection_info = {
-            "client_id": "YRVnFl13if4qJA",
-            "client_secret": "DtpGKTrNjsxPhrNLoX6NEdNPW7Y",
-            "user_agent": "Shredrealm"
+            "client_id": "test",
+            "client_secret": "test",
+            "user_agent": "test"
         }
         self.hot_limit = 9
 
