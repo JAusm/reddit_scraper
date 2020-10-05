@@ -69,10 +69,15 @@ class ScrapeSubreddit(ScrapeSubredditInterface):
         videos = []
         try:
             for post in self.posts:
-                url = post.media['reddit_video']['fallback_url']
-                url = url.split("?")[0]
-                name = post.title[:30].rstrip() + ".mp4"
-                videos.append((url, name))
+                # TODO This is a band aid. Logic in query_subreddit needs to change to handle None
+                if post.media is not None:
+                    url = post.media['reddit_video']['fallback_url']
+                    url = url.split("?")[0]
+                    name = post.title[:30].rstrip() + ".mp4"
+                    videos.append((url, name))
+                else:
+                    # TODO None will be handled by query_subreddit. This if else will be removed once that's done.
+                    pass
         except ResponseException as bad_response:
             # This is bad and I need to change it to retry rather than just returning
             return bad_response.args

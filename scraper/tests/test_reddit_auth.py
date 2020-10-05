@@ -9,9 +9,7 @@ class RedditAPIInterfaceTest(TestCase):
         self.connection_info = {
             "client_id": None,
             "client_secret": None,
-            "password": None,
             "user_agent": None,
-            "username": None
         }
 
     def test_reddit_api_interface_exists(self):
@@ -31,15 +29,7 @@ class RedditAPIInterfaceTest(TestCase):
             None
         )
         self.assertEqual(
-            actual.connection_info["password"],
-            None
-        )
-        self.assertEqual(
             actual.connection_info["user_agent"],
-            None
-        )
-        self.assertEqual(
-            actual.connection_info["username"],
             None
         )
 
@@ -56,9 +46,7 @@ class TestPrawAPI(TestCase):
         self.connection_info = {
             "client_id": "test_client_id",
             "client_secret": "test_client_secret",
-            "password": "test_password",
             "user_agent": "test_user_agent",
-            "username": "test_username"
         }
 
     def test_praw_api_exists(self):
@@ -78,16 +66,8 @@ class TestPrawAPI(TestCase):
             "test_client_secret"
         )
         self.assertEqual(
-            actual.connection_info["password"],
-            "test_password"
-        )
-        self.assertEqual(
             actual.connection_info["user_agent"],
             "test_user_agent"
-        )
-        self.assertEqual(
-            actual.connection_info["username"],
-            "test_username"
         )
 
     def test_auth_is_the_expected_praw_object(self):

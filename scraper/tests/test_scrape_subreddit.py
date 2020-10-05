@@ -29,11 +29,11 @@ class ScrapeSubredditsTests(TestCase):
 
         # When testing, actual credentials need to be supplied.
         self.connection_info = {
-            "client_id": "test",
-            "client_secret": "test",
-            "user_agent": "test"
+            "client_id": "YRVnFl13if4qJA",
+            "client_secret": "DtpGKTrNjsxPhrNLoX6NEdNPW7Y",
+            "user_agent": "Shredrealm"
         }
-        self.hot_limit = 6
+        self.hot_limit = 9
 
     def test_ScrapeSubreddit_returns_expected_results(self):
         actual = ScrapeSubreddit(
@@ -64,10 +64,11 @@ class ScrapeSubredditsTests(TestCase):
         posts = scrape_instance.query_subreddit(self.hot_limit)
 
         for post in posts:
-            self.assertEqual(
-                post.media['reddit_video']['fallback_url'].startswith("https://v.redd.it/"),
-                True
-            )
+            if post.media is not None:
+                self.assertEqual(
+                    post.media['reddit_video']['fallback_url'].startswith("https://v.redd.it/"),
+                    True
+                )
 
     def test_get_videos_returns_expected_list_length(self):
         """
@@ -89,7 +90,18 @@ class ScrapeSubredditsTests(TestCase):
             self.hot_limit
         )
 
+    def test_get_videos_returns_expected_data_for_each_video(self):
+
+        scrape_instance = ScrapeSubreddit(
+            self.subreddit,
+            self.connection_info,
+            self.hot_limit
+        )
+
+        videos = scrape_instance.get_videos()
+
         for video in videos:
+            print(video)
             self.assertEqual(
                 video[0].startswith('https://v.redd.it/'),
                 True
