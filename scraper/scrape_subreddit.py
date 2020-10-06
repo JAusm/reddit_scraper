@@ -73,7 +73,7 @@ class ScrapeSubreddit(ScrapeSubredditInterface):
                 if post.media is not None:
                     url = post.media['reddit_video']['fallback_url']
                     url = url.split("?")[0]
-                    name = post.title[:30].rstrip() + ".mp4"
+                    name = post.title[:30].replace(" ", "") + ".mp4"
                     videos.append((url, name))
                 else:
                     # TODO None will be handled by query_subreddit. This if else will be removed once that's done.
