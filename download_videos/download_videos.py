@@ -2,6 +2,8 @@ from urllib.request import urlretrieve
 import os
 from datetime import datetime
 
+from youtube_dl import YoutubeDL
+
 
 class DownloadVideos:
 
@@ -41,3 +43,18 @@ class DownloadVideos:
             url = video[0]
             name = video[1]
             urlretrieve(url, name)
+
+    def download_with_youtube_dl(self, video_data: list):
+
+        os.chdir(self.video_directory)
+
+        yt_dl_opts = {
+            'format': 'bestvideo+bestaudio',
+            'postprocessors': [{
+                'key': 'FFmpegMerger',
+            }]
+        }
+
+        with YoutubeDL(yt_dl_opts) as ydl:
+            for video in video_data:
+                ydl.download([video[0]])
