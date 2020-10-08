@@ -71,7 +71,7 @@ class DownloadVideosTests(TestCase):
         )
         video_data = scraper_instance.get_videos()
 
-        self.dv_instance.download_videos(video_data)
+        self.dv_instance.downloader(video_data)
 
         count = 0
         for file in os.listdir():

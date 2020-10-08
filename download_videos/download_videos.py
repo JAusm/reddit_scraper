@@ -30,21 +30,7 @@ class DownloadVideos:
 
         return new_directory_path
 
-    def download_videos(self, video_data: list):
-        """
-
-        Responsible for downloading videos from urls scraped from Reddit.
-
-        """
-
-        os.chdir(self.video_directory)
-
-        for video in video_data:
-            url = video[0]
-            name = video[1]
-            urlretrieve(url, name)
-
-    def download_with_youtube_dl(self, video_data: list):
+    def downloader(self, video_data: list):
 
         os.chdir(self.video_directory)
 
@@ -57,4 +43,10 @@ class DownloadVideos:
 
         with YoutubeDL(yt_dl_opts) as ydl:
             for video in video_data:
-                ydl.download([video[0]])
+                try:
+                    ydl.download([video[0]])
+                # For some reason the youtube-dl tries more than once to merge the video and audio.
+                # It throws a FileNotFound error because the audio and video files are deleted
+                # after the two are merged into a new file.
+                except FileNotFoundError:
+                    continue
