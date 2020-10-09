@@ -20,7 +20,7 @@ class DownloadVideosTests(TestCase):
             "client_secret": "test",
             "user_agent": "test"
         }
-        self.hot_limit = 9
+        self.hot_limit = 5
 
         self.dv_instance = DownloadVideos()
 
@@ -71,7 +71,7 @@ class DownloadVideosTests(TestCase):
         )
         video_data = scraper_instance.get_videos()
 
-        self.dv_instance.downloader(video_data)
+        downloaded = self.dv_instance.downloader(video_data)
 
         count = 0
         for file in os.listdir():
@@ -80,5 +80,5 @@ class DownloadVideosTests(TestCase):
 
         self.assertEqual(
             count,
-            len(video_data)
+            len(video_data) - downloaded
         )

@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 
 from youtube_dl import YoutubeDL
+from youtube_dl.utils import ExtractorError, DownloadError
 
 
 class DownloadVideos:
@@ -41,12 +42,24 @@ class DownloadVideos:
             }]
         }
 
+        download_errors = 0
         with YoutubeDL(yt_dl_opts) as ydl:
             for video in video_data:
                 try:
                     ydl.download([video[0]])
-                # For some reason the youtube-dl tries more than once to merge the video and audio.
-                # It throws a FileNotFound error because the audio and video files are deleted
-                # after the two are merged into a new file.
-                except FileNotFoundError:
-                    continue
+                except (ExtractorError,
+                        DownloadError,
+                        FileNotFoundError) as error:
+                    # I just want to keep track of how many of these I get.
+                    # Eventually I'll write some logic to retry if we hit this.
+                    if error.args[0] == "ERROR: requested format not available":
+                        download_errors += 1
+                        continue
+                    # This is here because of error with the youtube-dl library.
+                    # It merges the two files downloaded into a new file.
+                    # It then deletes the two files. Then it tries to merge
+                    # the two files that were deleted. Not sure why.
+                    elif error.args[0] == "The system cannot find the file specified":
+                        continue
+
+        return download_errors
