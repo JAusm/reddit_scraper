@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import shutil
 
-from download_videos import DownloadVideos
+from downloader import DownloadVideos
 from scraper.scrape_subreddit import ScrapeSubreddit
 
 
