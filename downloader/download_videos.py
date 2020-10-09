@@ -15,21 +15,21 @@ class DownloadVideos:
     def mkdir_for_videos(self):
         """
 
-        Responsible for defining the placement of videos dowloaded
+        Responsible for defining the placement of videos to be downloaded.
 
         """
 
         now_date = datetime.now().strftime("%Y%m%d-%H%M%S")
 
-        new_directory_path = os.path.join(
+        video_directory = os.path.join(
             self.project_directory,
             now_date +
             "_reddit_videos"
         )
 
-        os.mkdir(new_directory_path)
+        os.mkdir(video_directory)
 
-        return new_directory_path
+        return video_directory
 
     def downloader(self, video_data: list):
 
